@@ -1,0 +1,66 @@
+-----OTHERS
+
+-- --#3--If animal's status becomes deceaed should 
+-- CREATE FUNCTION fn__()
+-- RETURNS INT
+-- AS
+-- BEGIN
+-- DECLARE @RET INT = 0
+-- IF EXISTS (SELECT *
+--             FROM tblRESEARCHER
+--             WHERE ResearcherBirth > DateAdd(Year, -21, GetDate())
+-- )
+-- SET @RET = 1
+-- RETURN @RET
+-- END
+-- GO
+-- ALTER TABLE tblRESEARCHER WITH NOCHECK
+-- ADD CONSTRAINT CK_Nounder21_researcher
+-- CHECK (dbo.fn_Nounder21_Researcher() = 0)
+-- GO
+-- --#4--No one under 14 can be recognized as a alumni
+-- CREATE FUNCTION fn_Nounder14_Alumni()
+-- RETURNS INT
+-- AS
+-- BEGIN
+-- DECLARE @RET INT = 0
+-- IF EXISTS (SELECT *
+--             FROM tblALUMNI
+--             WHERE AlumniBirth > DateAdd(Year, -14, GetDate())
+-- )
+-- SET @RET = 1
+-- RETURN @RET
+-- END
+-- GO
+
+-- ALTER TABLE tblAlumni WITH NOCHECK
+-- ADD CONSTRAINT CK_Nounder14_alumni
+-- CHECK (dbo.fn_Nounder14_Alumni() = 0)
+-- GO
+
+-- --#5--Establish a computed column that displays the number of researchers under each program
+-- CREATE FUNCTION lucas_CalcNumResearchers(@PK INT)
+-- RETURNS INTEGER
+-- AS
+-- BEGIN
+-- DECLARE @RET INTEGER = (SELECT COUNT(R.ResearcherID)
+--                                 FROM tblRESEARCHER R
+--                                     JOIN tblPROGRAM P ON P.ProgramID = R.ProgramID)
+-- RETURN @RET
+-- END
+-- GO
+-- ALTER TABLE tblPROGRAM
+-- ADD lucas_CalcPeeps AS (dbo.lucas_CalcNumResearchers(ProgramID))
+-- GO
+
+-- --#6--Establish a computed column that displays the average age of researchers under each program
+-- CREATE FUNCTION lucas_AvgAgeResearchers(@PK INT)
+-- RETURNS INTEGER
+-- AS
+-- BEGIN
+-- DECLARE @RET INTEGER = (SELECT AVG(DateDiff(Year, ResearcherBirth, GetDate()))
+--                                 FROM tblRESEARCHER R
+--                                     JOIN tblPROGRAM P ON P.ProgramID = R.ProgramID)
+-- RETURN @RET
+-- END
+-- GO
