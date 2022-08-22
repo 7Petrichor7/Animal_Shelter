@@ -1,6 +1,5 @@
 --SYNTHETIC TRANSACTION & Explicit Trans
 
-
 ------------------------------------------------------Event 
 CREATE OR ALTER PROCEDURE wrapper_xxb_INSERT_Event
 @RUN INT

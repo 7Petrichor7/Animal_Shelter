@@ -6,6 +6,84 @@ SELECT* FROM dataset1
 GO
 
 
+-- SELECT*FROM dataset2
+
+-- SELECT DISTINCT intakedate FROM dataset2 
+
+-- SELECT DISTINCT EventDate FROM tblEVENT
+
+
+GO
+
+WITH cte AS (
+    SELECT 
+        id, 
+        intakedate, 
+        intakereason,
+        istransfer,
+        sheltercode,
+        identichipnumber,
+        animalname,
+        breedname,
+        basecolour,
+        speciesname,
+        animalage,
+        sexname,
+        location,
+        movementdate,
+        movementtype,
+        istrial,
+        returndate,
+        returnedreason,
+        deceaseddate,
+        deceasedreason,
+        ROW_NUMBER() OVER (
+            PARTITION BY 
+                -- intakedate, 
+                -- intakereason,
+                -- sheltercode,
+                -- identichipnumber,
+                animalname
+                -- breedname,
+                -- basecolour,
+                -- speciesname,
+                -- animalage,
+                -- sexname,
+                -- location,
+                -- movementdate,
+                -- movementtype,
+                -- istrial,
+                -- returndate,
+                -- returnedreason,
+                -- deceaseddate,
+                -- deceasedreason
+            ORDER BY 
+                -- intakedate, 
+                -- intakereason,
+                -- sheltercode,
+                -- identichipnumber,
+                animalname
+                -- breedname,
+                -- basecolour,
+                -- speciesname,
+                -- animalage,
+                -- sexname,
+                -- location,
+                -- movementdate,
+                -- movementtype,
+                -- istrial,
+                -- returndate,
+                -- returnedreason,
+                -- deceaseddate,
+                -- deceasedreason
+        ) row_num
+     FROM 
+        dbo.dataset2
+)
+DELETE FROM cte
+WHERE row_num > 1;
+
+
 ----------------------------- Process data
 
 delete from dataset1 where location IS NULL;
